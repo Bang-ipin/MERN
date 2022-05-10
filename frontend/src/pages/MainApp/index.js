@@ -1,5 +1,6 @@
 import React from 'react'
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
+import { Container } from 'reactstrap'
 import { Footer, Header } from '../../components'
 import Blog from '../Blog'
 import DetailBlog from '../DetailBlog'
@@ -14,19 +15,21 @@ const MainApp = () => {
                     <Header/>
                 </div>
                 <div className="header-wrapper">
-                    <Router>
-                        <Switch>
-                            <Route path="/create-blog">
-                                <Blog />
-                            </Route>
-                            <Route path="/detail-blog">
-                                <DetailBlog />
-                            </Route>
-                            <Route path="/">
-                                <Home />
-                            </Route>
-                        </Switch>
-                    </Router>
+                    <Container>
+                        <Router>
+                            <Switch>
+                                <Route path="/create-blog">
+                                    <Blog />
+                                </Route>
+                                <Route path="/detail-blog">
+                                    <DetailBlog />
+                                </Route>
+                                <Route path="/">
+                                    <Home />
+                                </Route>
+                            </Switch>
+                        </Router>
+                    </Container>
                 </div>
                 <div className="footer-wrapper">
                     <Footer/>

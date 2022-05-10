@@ -1,12 +1,13 @@
+import { TextField } from '@mui/material'
 import React from 'react'
-import { FormGroup, Input, Label } from 'reactstrap'
+import { FormGroup, Label } from 'reactstrap'
 import './Input.scss'
 
 const Inputs = ({label, ...rest}) => {
     return (
         <>
             <FormGroup floating>
-                <Input className="input" {...rest} />
+                <TextField className="input" {...rest} />
                 <Label for={label} className="label">{label}</Label>
             </FormGroup>
         </>            
