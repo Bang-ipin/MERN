@@ -1,5 +1,6 @@
 import React from 'react'
-import { Button } from 'reactstrap'
+import { Button } from '@mui/material'
+
 import './submit.scss'
 
 const Submit = ({label, ...rest}) => {

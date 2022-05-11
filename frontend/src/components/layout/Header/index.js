@@ -41,7 +41,7 @@ const Header = () => {
                             </DropdownMenu>
                         </UncontrolledDropdown>
                     </Nav>
-                    <NavbarText>Logout</NavbarText>
+                    <NavbarText>Login</NavbarText>
                 </Collapse>
             </Navbar>
         </>

@@ -1,5 +1,5 @@
 import React from 'react'
-// import { MDBFooter } from 'mdb-react-ui-kit';
+import { FacebookIcon, GithubIcon, GoogleIcon, InstagramIcon, LinkedInIcon, TwitterIcon } from '../../childs/Icon'
 import './footer.scss'
 
 const Footer = () => {
@@ -10,26 +10,25 @@ const Footer = () => {
                     <div className="me-5 d-none d-lg-block">
                         <span>Get connected with us on social networks:</span>
                     </div>
-
                     <div>
-                    <a href="https://facebook.com" className="me-4 text-reset">
-                        <i className="fab fa-facebook-f"></i>
-                    </a>
-                    <a href="https://twitter.com" className="me-4 text-reset">
-                        <i className="fab fa-twitter"></i>
-                    </a>
-                    <a href="https://google.com" className="me-4 text-reset">
-                        <i className="fab fa-google"></i>
-                    </a>
-                    <a href="https://instagram.com" className="me-4 text-reset">
-                        <i className="fab fa-instagram"></i>
-                    </a>
-                    <a href="https://linkedin.com" className="me-4 text-reset">
-                        <i className="fab fa-linkedin"></i>
-                    </a>
-                    <a href="https://github.com" className="me-4 text-reset">
-                        <i className="fab fa-github"></i>
-                    </a>
+                        <a href="https://facebook.com" className="me-4 text-reset">
+                            <FacebookIcon color='primary'/>
+                        </a>
+                        <a href="https://twitter.com" className="me-4 text-reset">
+                            <TwitterIcon color='info'/>
+                        </a>
+                        <a href="https://google.com" className="me-4 text-reset">
+                            <GoogleIcon color='success'/>
+                        </a>
+                        <a href="https://instagram.com" className="me-4 text-reset">
+                            <InstagramIcon color='error'/>
+                        </a>
+                        <a href="https://linkedin.com" className="me-4 text-reset">
+                            <LinkedInIcon color='primary'/>
+                        </a>
+                        <a href="https://github.com" className="me-4 text-reset">
+                            <GithubIcon color='primary' />
+                        </a>
                     </div>
                 </section>
 
@@ -115,9 +114,9 @@ const Footer = () => {
                 </section>
 
                 <div className="text-center p-4" style={{ backgroundColor: "rgba(0, 0, 0, 0.05)" }}>
-                    © 2021 Copyright:
+                    © 2022 Copyright:
                     <a className="text-reset fw-bold" href="https://mdbootstrap.com/">
-                    MDBootstrap.com
+                        MERN
                     </a>
                 </div>
             </footer>
