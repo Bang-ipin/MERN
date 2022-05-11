@@ -2,6 +2,7 @@ import db from '../../models/index.js'
 import ErrorResponse from '../../utils/errorResponse.js';
 import sendEmail from '../../utils/SendEmail.js'
 import crypto from "crypto";
+// import validateUser  from '../../models/user/index.js';
 
 const User   = db.user
 
@@ -14,12 +15,17 @@ const AuthController  = {
 
     Register : async (req,res,next) => {
         const data = {
-            username: req.body.username,
+            firstname: req.body.firstname,
+            lastname: req.body.lastname,
             email: req.body.email,
             password: req.body.password,
             published: req.body.published ? req.body.published : false
         };
         try {
+            // const validateUser = await User.findOne({email});
+            // if(!validateUser){
+            //     return next(new ErrorResponse("Invalid Credentials"))
+            // }
             const user = await User.create(data);
             sendToken(user,201,res);
         } catch (error) {

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,6 +12,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { API_URL } from '../../constants';
+import axios from 'axios'
+import { useHistory, useLocation } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -29,13 +32,31 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignUp() {
-  const handleSubmit = (event) => {
+  const[data,setData] = useState({
+    firstname:"",
+    lastname:"",
+    email:"",
+    password:"",
+  })
+  const[error, setError] = useState("");
+  const history = useHistory();
+  const navigate = useLocation();
+
+  const handleChange = ({currentTarget:input}) => {
+    setData({...data,[input.name]: input.value })
+  }
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    try {
+      const url = API_URL + "register";
+      const {data:res} = await axios.post(url,data);
+      navigate("/login")
+      console.log(res.message)
+    } catch (error) {
+      if(error.response && error.response.status >= 400 && error.response.status <=500){
+        setError(error.response.data.message)
+      }
+    }
   };
 
   return (
@@ -61,31 +82,37 @@ export default function SignUp() {
               <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="given-name"
-                  name="firstName"
+                  name="firstname"
                   required
                   fullWidth
-                  id="firstName"
+                  id="firstname"
                   label="First Name"
+                  value={data.firstName}
+                  onChange={handleChange}
                   autoFocus
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
+                  name="lastname"
                   required
                   fullWidth
-                  id="lastName"
+                  id="lastname"
                   label="Last Name"
-                  name="lastName"
+                  value={data.lastName}
+                  onChange={handleChange}
                   autoComplete="family-name"
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
+                  name="email"
                   fullWidth
                   id="email"
                   label="Email Address"
-                  name="email"
+                  value={data.email}
+                  onChange={handleChange}
                   autoComplete="email"
                 />
               </Grid>
@@ -97,6 +124,8 @@ export default function SignUp() {
                   label="Password"
                   type="password"
                   id="password"
+                  value={data.password}
+                  onChange={handleChange}
                   autoComplete="new-password"
                 />
               </Grid>
@@ -107,6 +136,7 @@ export default function SignUp() {
                 />
               </Grid>
             </Grid>
+            {error && <div className="error_msg"></div> }
             <Button
               type="submit"
               fullWidth

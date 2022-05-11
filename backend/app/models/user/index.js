@@ -1,11 +1,14 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import Joi from "joi";
+import passwordComplexity from 'joi-password-complexity'
 
 const UserModel = (mongoose) => {
-  const schema = mongoose.Schema(
+  const userSchema = mongoose.Schema(
     {
-      username: { type: String, required: [true, "Please provide a username"] },
+      firstname: { type: String, required: [true, "Please provide a first name"] },
+      lastname: { type: String, required: [true, "Please provide a last name"] },
       email: {
         type: String,
         required: [true, "Please provide a email"],
@@ -29,13 +32,13 @@ const UserModel = (mongoose) => {
     }
   );
 
-  schema.method("toJSON", function () {
+  userSchema.method("toJSON", function () {
     const { __v, _id, ...object } = this.toObject();
     object.id = _id;
     return object;
   });
 
-  schema.pre("save", async function (next) {
+  userSchema.pre("save", async function (next) {
     if (!this.isModified("password")) {
       next();
     }
@@ -44,16 +47,16 @@ const UserModel = (mongoose) => {
     next();
   });
 
-  schema.methods.matchPassword = async function (password) {
+  userSchema.methods.matchPassword = async function (password) {
     return await bcrypt.compare(password, this.password);
   };
 
-  schema.methods.getSignToken = function () {
+  userSchema.methods.getSignToken = function () {
     return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRE,
     });
   };
-  schema.methods.getResetPasswordToken = function () {
+  userSchema.methods.getResetPasswordToken = function () {
     const resetToken = crypto.randomBytes(20).toString("hex");
     this.resetpasswordToken = crypto
       .createHash("sha256")
@@ -64,7 +67,17 @@ const UserModel = (mongoose) => {
     return resetToken;
   };
 
-  const User = mongoose.model("users", schema);
+  const User = mongoose.model("users", userSchema);
   return User;
 };
 export default UserModel;
+
+// export const validateUser = (data) => {
+//   const schema = Joi.object({
+//       firstname: Joi.string().required().label("First Name"),
+//       lastname: Joi.string().required().label("Last Name"),
+//       email: Joi.string().required().label("Email"),
+//       password: passwordComplexity().required().label("Password"),
+//   });
+//   return schema.validateUser(data);
+// };
