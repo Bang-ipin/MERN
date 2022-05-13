@@ -3,8 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -14,7 +12,8 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { API_URL } from '../../constants';
 import axios from 'axios'
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import './register.scss'
 
 function Copyright(props) {
   return (
@@ -39,7 +38,6 @@ export default function SignUp() {
     password:"",
   })
   const[error, setError] = useState("");
-  const history = useHistory();
   const navigate = useLocation();
 
   const handleChange = ({currentTarget:input}) => {
@@ -50,11 +48,11 @@ export default function SignUp() {
     try {
       const url = API_URL + "register";
       const {data:res} = await axios.post(url,data);
+      console.log(res)
       navigate("/login")
-      console.log(res.message)
     } catch (error) {
       if(error.response && error.response.status >= 400 && error.response.status <=500){
-        setError(error.response.data.message)
+        setError(error.response.data.error)
       }
     }
   };
@@ -129,14 +127,8 @@ export default function SignUp() {
                   autoComplete="new-password"
                 />
               </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid>
             </Grid>
-            {error && <div className="error_msg"></div> }
+            {error && <div className="error_msg">{error}</div> }
             <Button
               type="submit"
               fullWidth
