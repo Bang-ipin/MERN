@@ -3,8 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -14,20 +12,8 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { API_URL } from '../../constants';
 import axios from 'axios'
-import { useHistory, useLocation } from "react-router-dom";
-
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import {useHistory} from 'react-router-dom'
+import './register.scss'
 
 const theme = createTheme();
 
@@ -40,21 +26,20 @@ export default function SignUp() {
   })
   const[error, setError] = useState("");
   const history = useHistory();
-  const navigate = useLocation();
 
-  const handleChange = ({currentTarget:input}) => {
-    setData({...data,[input.name]: input.value })
+  const handleChange = (e) => {
+    setData({...data,[e.currentTarget.name]: e.currentTarget.value })
   }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const url = API_URL + "register";
-      const {data:res} = await axios.post(url,data);
-      navigate("/login")
-      console.log(res.message)
+      await axios.post(url,data);
+      history.push("/login");
     } catch (error) {
       if(error.response && error.response.status >= 400 && error.response.status <=500){
-        setError(error.response.data.message)
+        setError(error.response.data.error)
       }
     }
   };
@@ -129,14 +114,8 @@ export default function SignUp() {
                   autoComplete="new-password"
                 />
               </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid>
             </Grid>
-            {error && <div className="error_msg"></div> }
+            {error && <div className="error_msg">{error}</div> }
             <Button
               type="submit"
               fullWidth
@@ -154,7 +133,6 @@ export default function SignUp() {
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 5 }} />
       </Container>
     </ThemeProvider>
   );
