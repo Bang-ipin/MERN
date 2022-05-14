@@ -1,8 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
-import Joi from "joi";
-import passwordComplexity from 'joi-password-complexity'
 
 const UserModel = (mongoose) => {
   const userSchema = mongoose.Schema(
@@ -24,6 +22,7 @@ const UserModel = (mongoose) => {
         minlength: 6,
         select: false,
       },
+      refresh_token:{type: String},
       resetpasswordToken: { type: String },
       resetpasswordExpire: { type: Date },
     },
@@ -52,8 +51,13 @@ const UserModel = (mongoose) => {
   };
 
   userSchema.methods.getSignToken = function () {
-    return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+    return jwt.sign({ id: this._id }, process.env.ACCESS_TOKEN_SECRET, {
       expiresIn: process.env.JWT_EXPIRE,
+    });
+  };
+  userSchema.methods.getRefreshToken = function () {
+    return jwt.sign({ id: this._id }, process.env.REFRESH_TOKEN_SECRET, {
+      expiresIn: process.env.JWT_REFRESH,
     });
   };
   userSchema.methods.getResetPasswordToken = function () {
@@ -71,13 +75,3 @@ const UserModel = (mongoose) => {
   return User;
 };
 export default UserModel;
-
-// export const validateUser = (data) => {
-//   const schema = Joi.object({
-//       firstname: Joi.string().required().label("First Name"),
-//       lastname: Joi.string().required().label("Last Name"),
-//       email: Joi.string().required().label("Email"),
-//       password: passwordComplexity().required().label("Password"),
-//   });
-//   return schema.validateUser(data);
-// };

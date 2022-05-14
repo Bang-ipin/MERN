@@ -12,21 +12,8 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { API_URL } from '../../constants';
 import axios from 'axios'
-import { useLocation } from "react-router-dom";
+import {useHistory} from 'react-router-dom'
 import './register.scss'
-
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const theme = createTheme();
 
@@ -38,18 +25,18 @@ export default function SignUp() {
     password:"",
   })
   const[error, setError] = useState("");
-  const navigate = useLocation();
+  const history = useHistory();
 
-  const handleChange = ({currentTarget:input}) => {
-    setData({...data,[input.name]: input.value })
+  const handleChange = (e) => {
+    setData({...data,[e.currentTarget.name]: e.currentTarget.value })
   }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const url = API_URL + "register";
-      const {data:res} = await axios.post(url,data);
-      console.log(res)
-      navigate("/login")
+      await axios.post(url,data);
+      history.push("/login");
     } catch (error) {
       if(error.response && error.response.status >= 400 && error.response.status <=500){
         setError(error.response.data.error)
@@ -146,7 +133,6 @@ export default function SignUp() {
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 5 }} />
       </Container>
     </ThemeProvider>
   );

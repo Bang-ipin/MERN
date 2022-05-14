@@ -2,12 +2,16 @@ import db from '../../models/index.js'
 import ErrorResponse from '../../utils/errorResponse.js';
 import sendEmail from '../../utils/SendEmail.js'
 import crypto from "crypto";
-// import validateUser  from '../../models/user/index.js';
 
 const User   = db.user
 
 const sendToken  = async (user,statusCode, res) => {
     const token = await user.getSignToken();
+    res.status(statusCode).json({ success:true,token})
+}
+
+const refreshToken  = async (user,statusCode, res) => {
+    const token = await user.getRefreshToken();
     res.status(statusCode).json({ success:true,token})
 }
 
@@ -49,6 +53,11 @@ const AuthController  = {
             }
 
             sendToken(user,200,res);
+            await User.update({refresh_token: refreshToken(user,200,res)},{
+                where:{
+                    _id: user[0].id
+                }
+            });
             
         } catch (error) {
             res.status(500).json({
@@ -118,7 +127,9 @@ const AuthController  = {
             next(error)
         }
 
+    },
+    Logout : async (req,res,next) => {
+
     }
-   
 }
 export default AuthController
